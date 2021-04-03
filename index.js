@@ -42,19 +42,20 @@ async function findAllTransaction(address) {
     const value = result[i].value;
     const tokenSymbol = result[i].tokenSymbol;
     if (from !== address || tokenSymbol !== "BKTC") continue;
-    console.log(
-      `hash ${hash}, from ${from} to ${result[i].to}, amount ${calculate(value)}`
-    );
+    // console.log(
+    //   `hash ${hash}, from ${from} to ${result[i].to}, amount ${calculate(value)}`
+    // );
     transList.push(`hash ${hash}, from ${from} to ${result[i].to}, amount ${calculate(value)}`);
     const balance = (await axios.get(balanceApiLink(address))).data.result;
-    console.log(`address: ${address}, balance: ${calculate(balance)}`);
+    // console.log(`address: ${address}, balance: ${calculate(balance)}`);
     balanceList.push(`address: ${address}, balance: ${calculate(balance)}`);
     await findAllTransaction(to);
   }
 }
 
-findAllTransaction(first_address);
-// for (const trans in transList)
-//   console.log(trans);
+findAllTransaction(first_address).then(() => {
+  transList.forEach(i => console.log(i));
+  balanceList.forEach(i => console.log(i));
+});
 // for (const balance in balanceList)
 //   console.log(balance);
