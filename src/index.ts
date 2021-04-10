@@ -25,28 +25,24 @@ async function findAllTransaction(address: string): Promise<void> {
   if (result.length === 0) {
     return;
   }
-  for (let i = 0; i < result.length; i++) {
-    const hash = result[i].hash;
-    const from = result[i].from;
-    const to = result[i].to;
-    const value = result[i].value;
-    const tokenSymbol = result[i].tokenSymbol;
+  for (const trans of result) {
+    const { hash, from, to, value, tokenSymbol } = trans;
     if (from !== address || tokenSymbol !== "BKTC") {
       continue;
     }
     transList.push(
-      `hash ${hash}, from ${from} to ${result[i].to}, amount ${calculate(
-        value
-      )}`
+      `hash ${hash}, from ${from} to ${to}, amount ${calculate(value)}`
     );
-    const balance = ((await axios.get(balanceApiLink(address))).data as Balance).result;
-    console.log(`address: ${address}, balance: ${calculate(balance)}`);
+    const balance = ((await axios.get(balanceApiLink(address))).data as Balance)
+      .result;
+    // console.log(`address: ${address}, balance: ${calculate(balance)}`);
     balanceList.push(`address: ${address}, balance: ${calculate(balance)}`);
-    await findAllTransaction(to);
+    return await findAllTransaction(to);
   }
 }
 
+console.log(`--------------------------------------------------------------------`)
 findAllTransaction(FIRST_ADDRESS).then(() => {
-  transList.forEach((i) => console.log(i));
-  balanceList.forEach((i) => console.log(i));
+  transList.forEach((i) => console.log(`${i}\n--------------------------------------------------------------------`));
+  balanceList.forEach((i) => console.log(`${i}\n--------------------------------------------------------------------`));
 });
