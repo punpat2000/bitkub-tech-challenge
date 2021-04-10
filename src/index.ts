@@ -1,7 +1,7 @@
 import axios from "axios";
 import API_KEY from "./api.const";
 import FIRST_ADDRESS from "./address.const";
-import { Data, Balance } from "./data.model";
+import type { Data, Balance } from "./data.model";
 
 const apiLink = (address: string) => {
   return `https://api-ropsten.etherscan.io/api?module=account&action=tokentx&address=${address}&startblock=0&endblock=999999999&sort=asc&API_KEY=${API_KEY}`;
