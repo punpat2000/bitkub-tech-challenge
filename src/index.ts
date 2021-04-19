@@ -15,7 +15,7 @@ const balanceApiLink = (address: string) => {
     API_KEY
   );
 };
-const calculate = (str: string) => parseInt(str) / Math.pow(10, 18);
+const calculate = (str: string) => Number(str) / (10 ** 18);
 const transList = new Array<string>();
 const balanceList = new Array<string>();
 
